@@ -239,10 +239,83 @@ body {
     line-height: 1.3;
 }
 
+.report-section h3 {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 0.75rem;
+    line-height: 1.35;
+}
+
+.report-section h4 {
+    font-size: 1rem;
+    margin: 0.5rem 0 0.6rem;
+    color: var(--color-text);
+}
+
+/* Subsection — adds vertical rhythm between h3-led subsections */
+.subsection {
+    margin-top: 1.75rem;
+}
+
+.subsection:first-of-type {
+    margin-top: 1rem;
+}
+
+.subsection ul {
+    margin-left: 1.2rem;
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.subsection ul li {
+    margin-bottom: 0.35rem;
+}
+
+.subsection a {
+    color: var(--color-accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease;
+}
+
+.subsection a:hover {
+    border-bottom-color: var(--color-accent);
+}
+
+em {
+    font-style: italic;
+}
+
+code {
+    font-family: 'JetBrains Mono', 'Source Code Pro', Consolas, monospace;
+    font-size: 0.85em;
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+}
+
 .report-section p {
     color: var(--color-text-secondary);
     font-size: 0.95rem;
     margin-bottom: 1rem;
+}
+
+.feature-list {
+    margin: 0.4rem 0 1rem 1.2rem;
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+}
+
+.feature-list li {
+    margin-bottom: 0.45rem;
+}
+
+.feature-list li:last-child {
+    margin-bottom: 0;
 }
 
 .report-section p:last-child {
@@ -253,6 +326,160 @@ body {
 .report-section+.report-section {
     padding-top: var(--section-gap);
     border-top: 1px solid var(--color-border);
+}
+
+/* ---------- Factor grid (four Effort factors) ---------- */
+.factor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0 1.25rem;
+}
+
+.factor-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.factor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.factor-name {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.factor-poles {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.02em;
+}
+
+.factor-def {
+    font-size: 0.88rem;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* ---------- Action grid (eight Basic Effort Actions) ---------- */
+.action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.65rem;
+    margin: 1rem 0 1.25rem;
+}
+
+.action-card {
+    background: var(--color-accent-light);
+    border: 1px solid rgba(67, 97, 238, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-start;
+}
+
+.action-name {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.01em;
+}
+
+.action-recipe {
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.02em;
+    font-style: italic;
+}
+
+/* ---------- Mapping table ---------- */
+.mapping-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0 1.25rem;
+    font-size: 0.88rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.mapping-table thead {
+    background: var(--color-accent-light);
+}
+
+.mapping-table th {
+    text-align: left;
+    padding: 0.7rem 0.9rem;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.mapping-table td {
+    padding: 0.7rem 0.9rem;
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+}
+
+.mapping-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.mapping-table tbody tr:hover {
+    background: #fafbff;
+}
+
+.mapping-table td:first-child {
+    font-weight: 600;
+    color: var(--color-text);
+    font-family: var(--font-serif);
+}
+
+/* ---------- Formula / inline code block ---------- */
+.formula {
+    display: block;
+    margin: 0.75rem 0 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-accent-light);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 6px 6px 0;
+    font-family: 'JetBrains Mono', 'Source Code Pro', Consolas, monospace;
+    font-size: 0.88rem;
+    color: var(--color-text);
+    overflow-x: auto;
+    white-space: pre;
+}
+
+/* Ordered lists in feature-list */
+ol.feature-list {
+    list-style: decimal;
+}
+
+ol.feature-list li::marker {
+    color: var(--color-accent);
+    font-weight: 600;
 }
 
 /* ---------- Footer ---------- */
@@ -311,6 +538,20 @@ body {
 @media (max-width: 720px) {
     .nav-toggle {
         display: flex;
+    }
+
+    .mapping-table {
+        font-size: 0.8rem;
+    }
+
+    .mapping-table th,
+    .mapping-table td {
+        padding: 0.55rem 0.65rem;
+    }
+
+    .factor-grid,
+    .action-grid {
+        grid-template-columns: 1fr;
     }
 
     .nav-panel {

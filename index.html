@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Embodied Interaction — A Kinesthetic Interface for Real-Time Audio Manipulation via Optical Hand Tracking
+    <title>Embodied Interaction, A Kinesthetic Interface for Real-Time Audio Manipulation via Optical Hand Tracking
     </title>
     <meta name="description"
-        content="Semester project report for the Embodied Interaction course — Medialogy MSc, Aalborg University, Copenhagen." />
+        content="Semester project report for the Embodied Interaction course, Medialogy MSc, Aalborg University, Copenhagen." />
     <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -28,11 +28,13 @@
             <li><a href="#paper-notes">Project Description</a></li>
             <li><a href="#abstract">Abstract</a></li>
             <li><a href="#introduction">Introduction</a></li>
-            <li><a href="#problem-statement">Problem Statement</a></li>
-            <li><a href="#theoretical-foundations">Theoretical Foundations</a></li>
-            <li><a href="#methodology">Methodology</a></li>
-            <li><a href="#analysis-results">Analysis &amp; Results</a></li>
+            <li><a href="#theoretical-foundations">Laban Movement Analysis</a></li>
+            <li><a href="#architecture">Interaction Architecture</a></li>
+            <li><a href="#methodology">Operationalizing Laban</a></li>
+            <li><a href="#mapping">Mapping Laban to Sound</a></li>
+            <!-- <li><a href="#analysis-results">Analysis &amp; Results</a></li> -->
             <li><a href="#discussion">Discussion</a></li>
+            <!-- <li><a href="#conclusion">Conclusion</a></li> -->
         </ul>
     </nav>
 
@@ -48,7 +50,7 @@
                 <div class="hero-meta">
                     <strong>Stefanos Biliousis</strong>
                     <span>Aalborg University, Copenhagen, Denmark</span>
-                    <span>Medialogy MSc</span>
+                    <span>Sound and Music Computing MSc</span>
                     <span>Embodied Interaction</span>
                     <span>Mini Project</span>
                 </div>
@@ -61,22 +63,36 @@
             <!-- Paper Notes -->
             <section id="paper-notes" class="report-section">
                 <div class="section-label">Section I</div>
-                <h2>Project description</a></h2>
+                <h2>Project Description</h2>
 
                 <div class="subsection">
                     <p>
-                        Interface that will manipulate audio effects in real time based on the position and movement of the user's hands.
-                        The system will use opencv/mediapipe and a webpacm (maybe leapmotion in the future) to track the user's hand and apply audio filters accordingly. 
-                        The hand movements will be based on the LABAN framework.
-                        This is a project based on the Sonic Interaction Design project.
+                        This mini project explores an embodied interaction approach for musical control, where the
+                        <em>quality</em> of hand movement shapes sound in real time. A webcam-based tracking pipeline
+                        captures 3D hand landmarks from one or two hands, and those signals drive a synthesizer whose
+                        timbre, pitch, and effects are organized around the categories of Laban Movement Analysis (LMA).
+                    </p>
+                    <p>
+                        The core design choice is to move beyond a simple &ldquo;position equals parameter&rdquo;
+                        mapping. Instead, raw joint data is interpreted through Laban-inspired descriptors such as
+                        directness, quickness, strength, and continuity, so that the system responds not only to
+                        <em>where</em> the hand is, but also to <em>how</em> it moves. The resulting instrument has a
+                        pose layer (what the hand looks like), a motion layer (how it is moving), a position layer
+                        (where it is in space), and a second-hand interaction layer that modulates effects on top.
                     </p>
                 </div>
 
-                <div class ="subsection">
-                    <h4>Relevant sources</h4>
+                <div class="subsection">
+                    <h4>Primary Source</h4>
                     <ul>
-                        <a href="https://www.semanticscholar.org/reader/6453d6366a26603e5e5eefc4c0365451928a79e4">Towards an Interactive Tool for Music and Dance: Gestures, Laban Movement Analysis and Spectromorphology</a>
+                        <li>
+                            <a href="https://www.semanticscholar.org/reader/6453d6366a26603e5e5eefc4c0365451928a79e4">
+                                Towards an Interactive Tool for Music and Dance: Gestures, Laban Movement Analysis and Spectromorphology
+                            </a>
+                        </li>
                     </ul>
+                </div>
+
             </section>
 
             <!-- Abstract -->
@@ -84,9 +100,17 @@
                 <div class="section-label">Section II</div>
                 <h2>Abstract</h2>
                 <p>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magni consequatur, dolore officiis facilis
-                    odio eum deleniti saepe excepturi doloremque voluptates autem hic modi eveniet, eos ullam ipsa!
-                    Aliquid, provident voluptatibus.
+                    This project presents a prototype for real-time audio manipulation based on embodied gesture input.
+                    Using MediaPipe hand tracking through a standard webcam, kinematic features are extracted from one
+                    or two hands and mapped to a synthesizer. The central contribution is a Laban-informed interaction
+                    model, in which the four Effort factors of LMA, namely Space, Time, Weight, and Flow, together
+                    with their eight polar combinations (the <em>Basic Effort Actions</em>), are treated as first-class
+                    expressive dimensions. Each Effort factor is operationalized as a measurable signal-processing
+                    feature and mapped to an audio stage that owns exactly one of them, eliminating parameter
+                    contention and preserving a legible cause-and-effect relationship between the mover and the sound.
+                    The resulting system demonstrates that Laban categories can function not only as an analytical
+                    vocabulary but as a concrete engineering target for designing expressive mappings in kinesthetic
+                    instruments.
                 </p>
             </section>
 
@@ -95,73 +119,544 @@
                 <div class="section-label">Section III</div>
                 <h2>Introduction</h2>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel repellendus quia nemo sunt minima quas
-                    harum possimus at dicta nobis! Quis quaerat id, quisquam expedita modi recusandae accusamus itaque
-                    eos.
+                    Gesture-controlled music interfaces have existed since the theremin, but many modern incarnations
+                    share a recurring weakness: they bind hand <em>coordinates</em> directly to audio
+                    <em>parameters</em>. Raising your hand increases pitch; moving sideways opens a filter. This is
+                    functional but brittle, and it treats the body as a spatial joystick rather than an expressive
+                    agent. The mover quickly finds that <em>intention</em> does not register in the sound: a slow,
+                    deliberate rise and a panicked jerk produce identical sonic results if they cover the same
+                    distance.
                 </p>
-            </section>
-
-            <!-- Problem Statement -->
-            <section id="problem-statement" class="report-section">
-                <div class="section-label">Section IV</div>
-                <h2>Problem Statement / Hypothesis</h2>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem saepe reprehenderit quod est ullam
-                    officiis, id cupiditate recusandae iste, quibusdam voluptatibus, nihil repudiandae illum. Fugiat
-                    delectus odio doloribus unde molestias!
+                    Embodied interaction design argues that movement is meaningful action shaped by intention, effort,
+                    and context (Dourish, 2001; Varela et al., 1991). A performer does not experience their body as a
+                    coordinate-emitting object but as a vehicle for qualities such as lightness, force, hesitation, and
+                    resolve. If an instrument is to feel <em>alive</em>, it must read those qualities, not only the
+                    geometry.
+                </p>
+                <p>
+                    This project asks a practical question: can Laban Movement Analysis, a movement vocabulary
+                    developed for choreography and somatic practice, provide a workable framework for designing
+                    expressive mappings in a small, technically feasible prototype? The aim is a pipeline in which
+                    design language, signal processing, and sound design speak in the same terms, so that the performer
+                    experiences continuity between bodily expression and sonic response.
                 </p>
             </section>
 
             <!-- Theoretical Foundations -->
             <section id="theoretical-foundations" class="report-section">
-                <div class="section-label">Section V</div>
-                <h2>Theoretical Foundations &amp; Related Work</h2>
+                <div class="section-label">Section IV</div>
+                <h2>Theoretical Foundations: Laban Movement Analysis</h2>
+
                 <p>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius temporibus dolores quia nobis error
-                    inventore repellendus quas distinctio, cumque nostrum in repudiandae quasi eaque porro corrupti
-                    delectus, nihil debitis laboriosam.
+                    Laban Movement Analysis is a descriptive system developed in the first half of the twentieth
+                    century by Rudolf Laban and further formalized by Bartenieff, Lamb, and others. LMA is used in
+                    dance, theatre, somatic practice, ethnography, and increasingly in human&ndash;computer
+                    interaction research, because it provides a <em>qualitative</em> vocabulary for movement that is
+                    nonetheless precise enough to be annotated, compared, and, crucially here, quantified.
                 </p>
+                <p>
+                    LMA is typically decomposed into four interrelated categories: Body (what parts are moving), Space
+                    (where movement goes in the kinesphere), Shape (how the body changes form), and Effort (the
+                    dynamic quality of movement). This project is built around the <em>Effort</em> category, which
+                    Laban himself also called <em>dynamics</em>, because it speaks most directly to the inner attitude
+                    that accompanies an action, namely the very thing a coordinate-based mapping fails to capture.
+                </p>
+
+                <div class="subsection">
+                    <h3>The Four Effort Factors</h3>
+                    <p>
+                        The Effort system is organized as four bipolar factors. Each factor has two polar qualities,
+                        an <em>indulging</em> pole and a <em>fighting</em> pole, and a neutral mid-range where no
+                        commitment is made in that dimension. The four factors describe orthogonal facets of the same
+                        movement, so any gesture carries all four qualities simultaneously, each on its own axis.
+                    </p>
+
+                    <div class="factor-grid">
+                        <div class="factor-card">
+                            <div class="factor-header">
+                                <span class="factor-name">Space</span>
+                                <span class="factor-poles"><em>direct</em> &middot; <em>indirect</em></span>
+                            </div>
+                            <p class="factor-def">
+                                The mover's attitude toward their path through space. Direct movements are pinpointed,
+                                linear, and single-focus, as when reaching precisely for an object. Indirect movements
+                                are flexible, multi-focus, and wandering, as when stirring, gathering, or attending to
+                                many things at once.
+                            </p>
+                        </div>
+
+                        <div class="factor-card">
+                            <div class="factor-header">
+                                <span class="factor-name">Time</span>
+                                <span class="factor-poles"><em>sudden</em> &middot; <em>sustained</em></span>
+                            </div>
+                            <p class="factor-def">
+                                The mover's attitude toward time. Sudden (quick) movements are urgent, instantaneous,
+                                and surprised. Sustained movements linger, drawing out a phrase with a sense of
+                                indulgence in duration. Note that Time is not equivalent to velocity in the physical
+                                sense; it is the mover's <em>attitude</em> toward time.
+                            </p>
+                        </div>
+
+                        <div class="factor-card">
+                            <div class="factor-header">
+                                <span class="factor-name">Weight</span>
+                                <span class="factor-poles"><em>strong</em> &middot; <em>light</em></span>
+                            </div>
+                            <p class="factor-def">
+                                The mover's attitude toward force. Strong (forceful) movements assert pressure, impact,
+                                and gravity. Light (gentle) movements resist gravity, floating and buoyant. Weight is
+                                not mass; it is the intentional use of force.
+                            </p>
+                        </div>
+
+                        <div class="factor-card">
+                            <div class="factor-header">
+                                <span class="factor-name">Flow</span>
+                                <span class="factor-poles"><em>free</em> &middot; <em>bound</em></span>
+                            </div>
+                            <p class="factor-def">
+                                The mover's attitude toward control. Free flow is difficult to stop, since momentum
+                                carries the body. Bound flow is tightly controlled and interruptible at any instant.
+                                Flow governs the <em>continuity</em> of the phrase and often determines its emotional
+                                temperature.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3>The Eight Basic Effort Actions</h3>
+                    <p>
+                        When three of the four Effort factors (Space, Time, Weight) commit to a pole simultaneously,
+                        the resulting combination is what Laban named a Basic Effort Action. Flow is intentionally
+                        excluded from the action-naming scheme because Laban treated it as a <em>modifier</em> that
+                        colors the continuity of any action rather than its character. The eight resulting actions are
+                        gestural archetypes that most people can recognize and perform without training:
+                    </p>
+
+                    <div class="action-grid">
+                        <div class="action-card"><span class="action-name">Punch</span>
+                            <span class="action-recipe">direct &middot; sudden &middot; strong</span>
+                        </div>
+                        <div class="action-card"><span class="action-name">Slash</span>
+                            <span class="action-recipe">indirect &middot; sudden &middot; strong</span>
+                        </div>
+                        <div class="action-card"><span class="action-name">Press</span>
+                            <span class="action-recipe">direct &middot; sustained &middot; strong</span>
+                        </div>
+                        <div class="action-card"><span class="action-name">Wring</span>
+                            <span class="action-recipe">indirect &middot; sustained &middot; strong</span>
+                        </div>
+                        <div class="action-card"><span class="action-name">Dab</span>
+                            <span class="action-recipe">direct &middot; sudden &middot; light</span>
+                        </div>
+                        <div class="action-card"><span class="action-name">Flick</span>
+                            <span class="action-recipe">indirect &middot; sudden &middot; light</span>
+                        </div>
+                        <div class="action-card"><span class="action-name">Glide</span>
+                            <span class="action-recipe">direct &middot; sustained &middot; light</span>
+                        </div>
+                        <div class="action-card"><span class="action-name">Float</span>
+                            <span class="action-recipe">indirect &middot; sustained &middot; light</span>
+                        </div>
+                    </div>
+
+                    <p>
+                        In the prototype these eight actions are first-class citizens: whenever a completed gesture
+                        commits to a pole on all three factors, the system reports the matching action by name and
+                        renders it prominently in the UI. This gives the mover a direct, named handle on their own
+                        Effort configuration and turns learning the instrument into something close to learning a
+                        small gestural alphabet.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Why Laban for Interaction Design</h3>
+                    <p>
+                        Three properties of LMA make it unusually well-suited as a bridge between bodily expression
+                        and computational audio control:
+                    </p>
+                    <ol class="feature-list">
+                        <li>
+                            <em>Orthogonality.</em> The four Effort factors describe mostly independent axes, so each
+                            factor can own a separate audio stage in the synth chain without fighting the others. This
+                            is the architectural principle the instrument is built on.
+                        </li>
+                        <li>
+                            <em>Bipolarity.</em> Each factor is a signed axis with a neutral middle, which maps very
+                            naturally onto audio parameters that have a clear &ldquo;off&rdquo; or baseline value, such
+                            as vibrato depth, distortion amount, or reverb wetness.
+                        </li>
+                        <li>
+                            <em>Qualitative legibility.</em> Because the categories describe subjective movement
+                            qualities, the performer can reason about the instrument in terms of how they intend to
+                            move rather than which numeric channel is being affected. This preserves the embodied
+                            loop: intention, movement, sound, perception, adjusted intention.
+                        </li>
+                    </ol>
+                </div>
             </section>
 
-            <!-- Methodology -->
+            <!-- Interaction Architecture -->
+            <section id="architecture" class="report-section">
+                <div class="section-label">Section V</div>
+                <h2>Interaction Architecture</h2>
+
+                <p>
+                    The instrument is organized around four concurrent control layers. Each layer targets a different
+                    category of bodily expression and is routed to a dedicated audio stage, so the layers combine
+                    additively instead of overwriting one another. The LMA Effort system provides the backbone of this
+                    layering: the motion layer is <em>entirely</em> LMA-driven, and the second-hand layer is described
+                    in LMA-compatible terms.
+                </p>
+
+                <div class="subsection">
+                    <h3>Layer 1, Pose (what the hand looks like)</h3>
+                    <p>
+                        Six discrete hand shapes select the synthesizer <em>voice</em>. A pose is a static
+                        configuration of the fingers, such as <em>Open Palm</em>, <em>Fist</em>, <em>Point</em>,
+                        <em>Pinch</em>, <em>Peace</em>, or <em>Thumbs Up</em>, and each maps to a distinct oscillator
+                        timbre (warm pad, aggressive sawtooth, clean lead, metallic bell, shimmer, retro buzz). In LMA
+                        terms this layer sits closer to the <em>Shape</em> category than to Effort: it does not
+                        describe movement dynamics but the configuration of the body at a moment. The purpose is to
+                        let the mover pick a sonic character before shaping it with motion.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Layer 2, Motion (how the hand is moving)</h3>
+                    <p>
+                        The four Effort factors are extracted continuously from the hand's centroid trajectory and
+                        drive the synthesizer's effects chain. This is where the Laban framework does its primary
+                        work: the mover's <em>attitude</em> toward Space, Time, Weight, and Flow is what the
+                        instrument responds to. This layer is detailed in the next two sections.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Layer 3, Position (where the hand is)</h3>
+                    <p>
+                        The hand's absolute position in the camera frame drives continuous pitch and loudness. X maps
+                        to pitch across a two-octave range, Y maps jointly to filter cutoff and amplitude. This layer
+                        is deliberately not LMA-driven: it provides the direct, theremin-like coupling that gives the
+                        instrument its baseline playability. The Laban layer then colors and shapes what this layer
+                        produces.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Layer 4, Second Hand (spatial interaction)</h3>
+                    <p>
+                        A second, optional hand acts as a modulator on top of the playing hand. The distance between
+                        the two hands adds reverb; the height of the second hand adds vibrato depth and rate; the pose
+                        of the second hand gates a feedback delay. Conceptually this layer extends the Effort model
+                        into the <em>relational</em> dimension (the Kinesphere, in LMA terminology) by using the space
+                        <em>between</em> the hands as a signed axis for effect intensity.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Methodology: Operationalizing Laban -->
             <section id="methodology" class="report-section">
                 <div class="section-label">Section VI</div>
-                <h2>Methodology</h2>
+                <h2>Operationalizing Laban</h2>
+
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint perferendis iste repudiandae tempora!
-                    Dolores, animi? Consequuntur unde, odio esse similique tempore officia itaque placeat, eos sequi
-                    assumenda, nesciunt modi exercitationem!
+                    The central engineering question of this project is how to turn Laban's qualitative Effort
+                    vocabulary into signals that can be computed from a 3D landmark stream at 60 Hz. The strategy is
+                    to express each Effort factor as a <em>signed scalar</em> in the interval [0, 1], where 0 and 1
+                    represent the two polar qualities and the neutral mid-range sits around 0.5. Each scalar is
+                    computed twice: once as a <em>live intensity</em> from a sliding window, so the instrument reacts
+                    while the gesture unfolds, and once as a <em>retrospective quality</em> at gesture end, so the
+                    Basic Effort Action can be named.
                 </p>
+
+                <div class="subsection">
+                    <h3>The Motion Signal</h3>
+                    <p>
+                        Raw tracking from MediaPipe is first reduced to a single <em>focal joint</em>, specifically
+                        the middle-finger MCP (landmark 9), which the Laban-for-animation literature identifies as
+                        the most stable single proxy for overall hand motion. The focal joint's 3D position is
+                        smoothed with a short moving average; from the smoothed position we derive scalar
+                        <em>velocity</em> and <em>acceleration</em> time series, which together form the raw material
+                        for Effort extraction.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Gesture Segmentation</h3>
+                    <p>
+                        Laban treats Effort as belonging to phrases of action, not to individual frames. The pipeline
+                        therefore segments the stream into discrete <em>gestures</em>: a <em>gesture start</em> is
+                        flagged when acceleration crosses an upper threshold, and a <em>gesture end</em> when it
+                        settles back below a lower threshold. A minimum duration filter rejects twitches, and a
+                        maximum duration cap releases stuck gestures. Each gesture has a start time, an end time, a
+                        list of positions, and a list of accelerations. These form the data record from which every
+                        retrospective Effort computation is derived.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Space: Direct vs Indirect</h3>
+                    <p>
+                        Space is operationalized as <em>trajectory straightness</em>. The measure is the ratio between
+                        the total path length (sum of inter-frame displacements) and the direct displacement (straight
+                        line from start to end of the gesture):
+                    </p>
+                    <pre class="formula">spaceRatio = totalPathLength / linearDisplacement</pre>
+                    <p>
+                        A direct gesture has a spaceRatio close to 1.0 because its path is close to a straight line.
+                        An indirect gesture wanders and produces a ratio substantially greater than 1. The live
+                        version of this metric is computed over a sliding window of recent positions so the
+                        instrument can respond to wandering <em>as it happens</em>, not only once the gesture ends.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Time: Sudden vs Sustained</h3>
+                    <p>
+                        Time is operationalized through a <em>score</em> that combines two cues: gesture duration and
+                        the mean absolute acceleration across the phrase. A short duration <em>or</em> a high mean
+                        acceleration contributes to a sudden score; a long duration <em>or</em> a low mean
+                        acceleration contributes to a sustained score. The winning pole is whichever score is higher
+                        and non-zero; ties resolve to neutral.
+                    </p>
+                    <p>
+                        Using a score instead of a strict dual-gate (which would require <em>both</em> duration and
+                        acceleration conditions to agree) was a deliberate design decision after testing revealed
+                        that real human gestures rarely hit both conditions cleanly. A performer may execute a short
+                        but measured gesture that reads unambiguously as &ldquo;sudden&rdquo; despite a moderate
+                        acceleration profile. The score-based operationalization honors the intuition that either
+                        cue is sufficient evidence of temporal attitude.
+                    </p>
+                    <p>
+                        For onset shaping, the pipeline additionally uses a <em>predictive</em> Time estimator: at
+                        the instant a gesture starts, the acceleration spike alone is used to predict whether the
+                        emerging phrase will be sudden. This prediction is fed immediately into the synth envelope,
+                        so that sudden gestures actually <em>sound</em> sudden on their first sample, rather than
+                        inheriting the previous gesture's envelope and feeling limp on onset.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Weight: Strong vs Light</h3>
+                    <p>
+                        Weight is operationalized as <em>mean absolute acceleration</em> across the gesture, modulated
+                        by a directional bias toward upward motion. In LMA, strong Weight is often associated with
+                        commitment against gravity (pressing, pushing, punching), so a gesture that contains upward
+                        acceleration is given a threshold bonus when classifying strength. A gesture whose mean
+                        acceleration sits below a low threshold is labelled light. Mid-range gestures are neutral.
+                    </p>
+                    <p>
+                        The live version of Weight is a sliding-window RMS of acceleration, normalized into [0, 1],
+                        which is written each frame to the distortion stage of the synth, so that a gesture which
+                        <em>feels</em> heavier actually sounds dirtier, mid-gesture.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Flow: Free vs Bound</h3>
+                    <p>
+                        Flow is operationalized as the <em>root-mean-square jerk</em>, namely the RMS of the
+                        derivative of acceleration, computed across the gesture. High jerk indicates many small
+                        corrections, which in LMA corresponds to bound flow (controlled, interruptible). Low jerk
+                        indicates a smooth, unstoppable arc, which corresponds to free flow.
+                    </p>
+                    <p>
+                        Jerk is an unusually good proxy for LMA Flow because it directly measures the
+                        <em>smoothness of force application</em>, which is exactly the physical property Laban's
+                        Free/Bound axis describes. A ballistic throw produces low jerk; a hesitant, micro-corrected
+                        gesture produces high jerk. The live version drives reverb wetness inversely: free gestures
+                        produce wet, lingering tails, bound gestures produce dry, contained sound.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Basic Effort Action Detection</h3>
+                    <p>
+                        At gesture end, the three committed qualities (Space, Time, Weight) are concatenated into a
+                        triple such as <code>(direct, sudden, strong)</code> and looked up in the table of eight
+                        Basic Effort Actions. The triple must contain no <em>neutral</em> values for a named action
+                        to be reported; otherwise the gesture is simply annotated with its factor readings and no
+                        action name. This rule preserves Laban's original formulation that an action exists only
+                        when all three factors have committed.
+                    </p>
+                    <p>
+                        The currently detected action is surfaced prominently in the UI, and a running tally of
+                        actions encountered in the session is displayed alongside the live Effort meters, turning
+                        the session into a small kinaesthetic game of discovering and rehearsing the eight
+                        archetypes.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Live vs Retrospective Analysis</h3>
+                    <p>
+                        Earlier iterations of the prototype only computed Effort <em>retrospectively</em>, at gesture
+                        end. This produced a disconnect: the mover had to complete a gesture, and <em>then</em> hear
+                        the sound update, which broke the expressive loop. The current architecture runs a live
+                        analysis pass every frame that computes sliding-window intensities for Weight, Space, and
+                        Flow and writes them immediately to the synth. The retrospective pass at gesture end still
+                        runs, but its job is now limited to <em>naming</em> the action and populating UI summaries;
+                        it no longer reshapes the audio. This was the single most important change in making the
+                        instrument feel responsive to Effort.
+                    </p>
+                </div>
             </section>
 
-            <!-- Analysis & Results -->
-            <section id="analysis-results" class="report-section">
+            <!-- Mapping Laban to Sound -->
+            <section id="mapping" class="report-section">
                 <div class="section-label">Section VII</div>
-                <h2>Analysis &amp; Results</h2>
+                <h2>Mapping Laban to Sound</h2>
+
                 <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque, incidunt voluptatibus. Molestias
-                    itaque quos quibusdam quo soluta, autem natus voluptatem impedit voluptates facilis dolor laborum
-                    minus obcaecati earum! Et, adipisci.
+                    Each Effort factor owns exactly one audio stage. This is the central <em>hygiene</em> principle
+                    of the mapping layer: no two factors write to the same parameter, so they never fight each other
+                    frame-to-frame, and the mover can learn the instrument by learning four independent associations
+                    rather than a tangle of combined effects.
                 </p>
+
+                <table class="mapping-table">
+                    <thead>
+                        <tr>
+                            <th>Effort Factor</th>
+                            <th>Poles</th>
+                            <th>Audio Stage</th>
+                            <th>Perceived Quality</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Space</td>
+                            <td><em>direct</em> - <em>indirect</em></td>
+                            <td>Vibrato depth &amp; rate</td>
+                            <td>Straight paths sound centered; wandering paths acquire shimmer and modulation</td>
+                        </tr>
+                        <tr>
+                            <td>Time</td>
+                            <td><em>sudden</em> - <em>sustained</em></td>
+                            <td>Amplitude envelope + percussive onset</td>
+                            <td>Quick gestures become transient hits; slow gestures become held, evolving tones</td>
+                        </tr>
+                        <tr>
+                            <td>Weight</td>
+                            <td><em>light</em> - <em>strong</em></td>
+                            <td>Distortion drive</td>
+                            <td>Gentle motion is clean; forceful motion becomes saturated and harmonically rich</td>
+                        </tr>
+                        <tr>
+                            <td>Flow</td>
+                            <td><em>free</em> - <em>bound</em></td>
+                            <td>Reverb wet/dry</td>
+                            <td>Smooth arcs linger in space; controlled, interruptible gestures sound dry and contained</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="subsection">
+                    <h3>Rationale for Each Mapping</h3>
+                    <p>
+                        Each pairing was chosen because the perceptual character of the audio stage mirrors the
+                        qualitative character of the Effort factor:
+                    </p>
+                    <ul class="feature-list">
+                        <li>
+                            <em>Space - Vibrato.</em> Indirect movement wanders around a spatial target; vibrato
+                            wanders around a pitch target. Both describe an unwillingness to commit to a single point.
+                            Vibrato depth grows with the wandering ratio, and its rate shifts subtly upward, because
+                            an indirect path typically also carries a sense of flutter.
+                        </li>
+                        <li>
+                            <em>Time - Envelope.</em> Sudden Time collapses duration; envelopes collapse attack
+                            and release toward zero. Sustained Time indulges in duration; envelopes with long attacks
+                            and releases indulge in the sonic equivalent. On a predicted sudden onset, the synth
+                            switches to a <em>percussive</em> trigger (brief attack-release) so the gesture actually
+                            sounds transient, rather than the held tone that would result from a pure attack-only
+                            trigger.
+                        </li>
+                        <li>
+                            <em>Weight - Drive.</em> Strong Weight delivers force; distortion audibly crushes a
+                            signal under force. The pairing is about the <em>audible effort</em> of the instrument
+                            itself, not merely about loudness, since volume is owned by the position layer. Weight
+                            specifically affects timbral density.
+                        </li>
+                        <li>
+                            <em>Flow - Reverb.</em> Free Flow lets sound <em>fall forward</em>; a wet reverb lets
+                            sound continue in the room after the gesture is over. Bound Flow interrupts, so a dry
+                            signal stops when the hand stops. Jerk-driven reverb closes the loop: the more the hand
+                            hesitates and corrects, the more the room appears to close in.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <h3>The Eight Actions as Sonic Gestalts</h3>
+                    <p>
+                        Because each factor owns a distinct audio stage, the eight Basic Effort Actions emerge as
+                        distinct sonic <em>gestalts</em> rather than isolated parameter changes. A <em>Punch</em>
+                        (direct, sudden, strong) produces a centered, percussive, saturated hit without any
+                        user-side configuration; a <em>Float</em> (indirect, sustained, light) produces a wandering,
+                        held, clean tone. Rehearsing the eight actions is therefore a natural onboarding curriculum
+                        for the instrument: mastering the action vocabulary is equivalent to mastering the eight most
+                        legible sonic outcomes.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3>Second-Hand Modulation Layer</h3>
+                    <p>
+                        The second-hand layer extends the Effort-driven synth with relational modulators drawn from
+                        the space <em>between</em> the two hands. Its design respects the same one-factor-per-stage
+                        hygiene: the reverb stage receives an <em>additive</em> boost from inter-hand distance on top
+                        of its Flow-driven baseline, and the vibrato stage takes the <em>maximum</em> of the
+                        Space-driven depth and a height-driven second-hand depth. The delay stage is owned exclusively
+                        by the second-hand pose and is never touched by the LMA pipeline. When the second hand leaves
+                        the frame, these modulators decay smoothly to zero, so the instrument returns to pure
+                        single-hand Laban behavior without audible discontinuity.
+                    </p>
+                </div>
             </section>
+
 
             <!-- Discussion -->
             <section id="discussion" class="report-section">
                 <div class="section-label">Section IX</div>
                 <h2>Discussion</h2>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem nisi corporis laboriosam, accusamus
-                    ullam eos quod beatae et quae maiores! Dolore tempore, reiciendis ipsum reprehenderit soluta nisi
-                    autem quam laboriosam?
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem nisi corporis laboriosam, accusamus
-                    ullam eos quod beatae et quae maiores! Dolore tempore, reiciendis ipsum reprehenderit soluta nisi
-                    autem quam laboriosam?
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem nisi corporis laboriosam, accusamus
-                    ullam eos quod beatae et quae maiores! Dolore tempore, reiciendis ipsum reprehenderit soluta nisi
-                    autem quam laboriosam?
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem nisi corporis laboriosam, accusamus
-                    ullam eos quod beatae et quae maiores! Dolore tempore, reiciendis ipsum reprehenderit soluta nisi
-                    autem quam laboriosam?
+                    The prototype demonstrates that Laban Movement Analysis can function as a bridge between design
+                    language and signal processing implementation. Rather than being used only as an analytical
+                    vocabulary applied <em>post hoc</em> to describe finished works, the four Effort factors and the
+                    eight Basic Effort Actions here became explicit engineering targets for feature extraction,
+                    mapping, and UI design. The same words, namely <em>direct</em>, <em>sustained</em>,
+                    <em>strong</em>, and <em>free</em>, travel from Laban's original texts through the algorithms and
+                    arrive at the sound the performer hears.
+                </p>
+                <p>
+                    Two architectural decisions proved especially consequential. The first was the
+                    <em>one-factor-per-stage</em> hygiene: by giving each Effort factor exclusive write access to a
+                    distinct audio stage, the mapping became predictable and debuggabl.
+                    The second was the <em>live/retrospective split</em>: live intensities drive the
+                    sound, retrospective qualities name the action. The split respects Laban's original insight that
+                    Effort is a quality of the <em>phrase</em> while also respecting the interaction-design
+                    constraint that the sound must react within the phrase, not after it.
+                </p>
+                <p>
+                    Limitations remain. The operationalizations are approximations: jerk captures much but not all
+                    of Flow, and the score-based Time estimator compromises strict Laban formalism for
+                    responsiveness. The focal-joint simplification ignores the body-part category of LMA entirely; a
+                    whole-body version would require pose estimation beyond the hand. The current system is also
+                    designed for a single performer, so group Effort, which Laban discusses extensively, is out of
+                    scope. Finally, the webcam pipeline inherits the usual dependencies on lighting, skin-tone
+                    contrast against the background, and occlusion.
+                </p>
+                <p>
+                    Promising extensions include adding Shape descriptors (advancing/retreating, rising/sinking,
+                    enclosing/spreading) from torso motion to color the voice layer; using user-adaptive mapping
+                    profiles so the four Effort thresholds calibrate to the performer's kinesphere; integrating
+                    depth sensing to improve robustness; and exploring a dance-scale version of the system using
+                    full-body MoCap where the Body category of LMA can be engaged alongside Effort.
                 </p>
             </section>
 
@@ -169,7 +664,7 @@
 
         <!-- Footer -->
         <footer class="site-footer">
-            &copy; 2026 Stefanos Biliousis
+            &copy; 2026 Stefanos Biliousis &middot; Aalborg University, Copenhagen
         </footer>
 
     </main>
