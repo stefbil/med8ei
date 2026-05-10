@@ -36,6 +36,12 @@
             <li><a href="#discussion">Discussion</a></li>
             <!-- <li><a href="#conclusion">Conclusion</a></li> -->
         </ul>
+        <a class="repo-link" href="https://github.com/stefbil/laban-audio" target="_blank" rel="noopener noreferrer" aria-label="Open GitHub repository">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82A7.65 7.65 0 018 4.66c.68.003 1.36.092 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.001 8.001 0 0016 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            <span>stefbil / laban-audio</span>
+        </a>
     </nav>
 
     <!-- Main Content -->
@@ -89,6 +95,11 @@
                             <a href="https://www.semanticscholar.org/reader/6453d6366a26603e5e5eefc4c0365451928a79e4">
                                 Towards an Interactive Tool for Music and Dance: Gestures, Laban Movement Analysis and
                                 Spectromorphology
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.researchgate.net/profile/Diego-S-Maranan-2/publication/264121625_Recognizing_Movement_Qualities_Mapping_LMA_Effort_Factors_to_Visualization_of_Movement/links/54442b310cf2e6f0c0fb9d4c/Recognizing-Movement-Qualities-Mapping-LMA-Effort-Factors-to-Visualization-of-Movement.pdf">
+                                Recognizing Movement Qualities: Mapping LMA Effort Factors to Visualization of Movement
                             </a>
                         </li>
                     </ul>
@@ -281,20 +292,30 @@
                     </p>
                     <ol class="feature-list">
                         <li>
-                            <em>Orthogonality.</em> The four Effort factors describe mostly independent axes, so each
-                            factor can own a separate audio stage in the synth chain without fighting the others. This
-                            is the architectural principle the instrument is built on.
+                            <em>Orthogonality.</em> The four Effort factors are treated here as independent axes,
+                            enabling each factor to own a separate audio stage in the synth chain without contending
+                            with the others. This is an engineering assumption rather than an inherent property of LMA:
+                            Laban himself identified <em>Effort affinities</em> as tendencies for certain poles to
+                            cluster together in practice. Sudden Time and Strong Weight frequently co-occur; Free Flow
+                            and Sustained Time affiliate naturally; Direct Space tends toward Sudden Time. Adopting
+                            orthogonality as a design principle departs from these affinities, trading theoretical
+                            fidelity for mapping legibility and implementation tractability. A fuller treatment of LMA
+                            would require recognizing affiliated combinations as emergent patterns, which is outside
+                            the scope of this project at this time.
                         </li>
                         <li>
                             <em>Bipolarity.</em> Each factor is a signed axis with a neutral middle, which maps very
-                            naturally onto audio parameters that have a clear &ldquo;off&rdquo; or baseline value, such
+                            naturally onto audio parameters that have a clear offset or baseline value, such
                             as vibrato depth, distortion amount, or reverb wetness.
                         </li>
                         <li>
                             <em>Qualitative legibility.</em> Because the categories describe subjective movement
                             qualities, the performer can reason about the instrument in terms of how they intend to
-                            move rather than which numeric channel is being affected. This preserves the embodied
-                            loop: intention, movement, sound, perception, adjusted intention.
+                            move rather than which numeric channel is being affected. The design goal is to preserve
+                            the embodied loop: intention, movement, sound, perception, adjusted intention. Whether
+                            this loop is actually experienced as continuous, rather than merely architected that way, 
+                            is an empirical question that would require user evaluation to establish and is
+                            discussed further in Section VIII.
                         </li>
                     </ol>
                 </div>
@@ -316,22 +337,30 @@
                 <div class="subsection">
                     <h3>Layer 1, Pose (what the hand looks like)</h3>
                     <p>
-                        Three hand shapes select the synthesizer voice, and each is drawn from Laban's Shape category
-                        rather than chosen arbitrarily. Shape describes how the body changes its relationship to itself
-                        and to the surrounding space, and the three shapes used here correspond to three fundamental
-                        Shape-Flow attitudes: growing outward, shrinking inward, and channeling toward a point.
-                        A hand that spreads open, fingers extended and separated, embodies an outward, expanding
+                        Three hand shapes select the synthesizer voice, each motivated by Laban's Shape
+                        category, specifically the Shape-Flow sub-component, which describes the body's tendency to
+                        grow outward or shrink inward in relation to its own center. An important caveat applies:
+                        in LMA, Shape-Flow refers to a dynamic, ongoing process of body-shape change (closely
+                        associated with breath), not a static configuration. The three poses used here are
+                        detected as frame-by-frame snapshots rather than shape-change processes, so they draw on
+                        Shape-Flow attitudes as motivating metaphors rather than implementing them in the strict
+                        LMA sense. More precisely, they sit closer to LMA's Body category, describing which
+                        parts of the hand are active, while their timbral assignments are justified by the
+                        Shape-Flow attitudes those configurations imply. With that qualification, the three
+                        attitudes give the taxonomy a grounded rationale:
+                        A hand that spreads open, fingers extended and separated, implies an outward, expanding
                         relationship to space. This maps to a stacked harmonic oscillator, a timbre that is wide and
                         colourful, occupying sonic space in the same way the gesture occupies physical space.
-                        A hand that gathers into a closed fist embodies an inward, enclosing relationship. Its timbre is
+                        A hand that gathers into a closed fist implies an inward, enclosing relationship. Its timbre is
                         a dense sawtooth, harmonically compressed and focused, mirroring the gesture's shrinking
                         quality.
                         A hand that directs, either with a single extended index finger or with thumb and index pinched
-                        together, embodies an aimed, channeling relationship to a specific point in space. Its timbre is
+                        together, implies an aimed, channeling relationship to a specific point in space. Its timbre is
                         a triangle wave, tonally clear and single-focused, which suits the directional intention of the
                         gesture.
-                        In LMA terms this layer sits in the Shape category rather than Effort: it describes the
-                        configuration the body takes, not the dynamic quality of movement. The purpose is to let the
+                        In LMA terms this layer is most accurately understood as sitting between the Body and Shape
+                        categories rather than fully in either: it describes a hand configuration (Body) whose
+                        spatial implications (Shape) motivate the voice choice. The purpose is to let the
                         mover choose a sonic character through their hand's relationship to space, before the Effort
                         layer shapes how that character is expressed through motion.
                     </p>
@@ -363,9 +392,14 @@
                     <p>
                         A second, optional hand acts as a modulator on top of the playing hand. The distance between
                         the two hands adds reverb; the height of the second hand adds vibrato depth and rate; the pose
-                        of the second hand gates a feedback delay. Conceptually this layer extends the Effort model
-                        into the <em>relational</em> dimension (the Kinesphere, in LMA terminology) by using the space
-                        <em>between</em> the hands as a signed axis for effect intensity.
+                        of the second hand gates a feedback delay. Conceptually this layer introduces a spatial
+                        dimension beyond a single hand. In LMA's Space vocabulary, the <em>kinesphere</em> is the
+                        sphere of space immediately surrounding and reachable from the body's center — a boundary
+                        of personal reach, not a relational axis between limbs. Both hands operate within the
+                        performer's kinesphere, and the distance between them becomes a continuous expressive
+                        parameter: a form of intra-kinespheric self-relation. This is an extension of the spatial
+                        vocabulary into a domain LMA does not directly prescribe, rather than a strict application
+                        of the kinesphere concept.
                     </p>
                 </div>
             </section>
@@ -383,6 +417,20 @@
                     computed twice: once as a <em>live intensity</em> from a sliding window, so the instrument reacts
                     while the gesture unfolds, and once as a <em>retrospective quality</em> at gesture end, so the
                     Basic Effort Action can be named.
+                </p>
+                <p>
+                    A fundamental tension underlies this section. LMA Effort describes <em>attitudes</em> as the
+                    mover's intentional, phenomenological relationship to space, time, force, and continuity while
+                    the signals computed here are <em>kinematic measurements</em>: ratios, durations, accelerations,
+                    and their derivatives. The operationalizations that follow are physical correlates that tend to
+                    co-occur with the corresponding attitudes across typical movement types, but they are not
+                    equivalent to those attitudes. A mover can exhibit Strong Weight without high acceleration
+                    (a slow, deliberate, pressing quality), and high acceleration without Strong Weight (a panicked
+                    twitch). The system will classify by the measurement rather than the intention. This limitation
+                    is inherent to any attempt to compute Effort from kinematics without biometric sensing of
+                    internal muscular state, and is acknowledged across the computational LMA literature. The
+                    operationalizations here should be understood as principled proxies rather than direct
+                    measurements of LMA qualities.
                 </p>
 
                 <div class="subsection">
@@ -439,7 +487,7 @@
                         Using a score instead of a strict dual-gate (which would require <em>both</em> duration and
                         acceleration conditions to agree) was a deliberate design decision after testing revealed
                         that real human gestures rarely hit both conditions cleanly. A performer may execute a short
-                        but measured gesture that reads unambiguously as &ldquo;sudden&rdquo; despite a moderate
+                        but measured gesture that reads unambiguously as "sudden" despite a moderate
                         acceleration profile. The score-based operationalization honors the intuition that either
                         cue is sufficient evidence of temporal attitude.
                     </p>
@@ -477,11 +525,15 @@
                         indicates a smooth, unstoppable arc, which corresponds to free flow.
                     </p>
                     <p>
-                        Jerk is an unusually good proxy for LMA Flow because it directly measures the
-                        <em>smoothness of force application</em>, which is exactly the physical property Laban's
-                        Free/Bound axis describes. A ballistic throw produces low jerk; a hesitant, micro-corrected
-                        gesture produces high jerk. The live version drives reverb wetness inversely: free gestures
-                        produce wet, lingering tails, bound gestures produce dry, contained sound.
+                        Jerk is a reasonable proxy for LMA Flow under typical movement conditions: a ballistic
+                        throw produces low jerk (few corrections, uninterrupted arc), while a hesitant,
+                        micro-corrected gesture produces high jerk (many small adjustments). The correspondence
+                        is not universal, however. Certain movements, such as rapid shaking or vibrating gestures, 
+                        produce high jerk alongside what Laban would describe as free flow; conversely, a very
+                        slow, deliberate press can have low jerk variability while exhibiting deeply bound flow.
+                        The operationalization is therefore reliable across common gesture types rather than a
+                        general equivalent of the LMA quality. The live version drives reverb wetness inversely:
+                        free gestures produce wet, lingering tails, bound gestures produce dry, contained sound.
                     </p>
                 </div>
 
@@ -543,8 +595,8 @@
                         <tr>
                             <td>Space</td>
                             <td><em>direct</em> - <em>indirect</em></td>
-                            <td>Vibrato depth &amp; rate</td>
-                            <td>Straight paths sound centered; wandering paths acquire shimmer and modulation</td>
+                            <td>Vibrato depth &amp; rate; onset pitch quantization (Direct)</td>
+                            <td>Straight paths snap the onset to a pentatonic scale and suppress vibrato; wandering paths acquire shimmer and modulation</td>
                         </tr>
                         <tr>
                             <td>Time</td>
@@ -571,8 +623,11 @@
                 <div class="subsection">
                     <h3>Rationale for Each Mapping</h3>
                     <p>
-                        Each pairing was chosen because the perceptual character of the audio stage mirrors the
-                        qualitative character of the Effort factor:
+                        Each pairing was chosen on the basis of conceptual analogy: the perceptual character of
+                        the audio stage mirrors the qualitative character of the Effort factor. LMA does not
+                        prescribe which audio parameters Effort qualities should govern; those correspondences are
+                        the original contribution of this mapping layer, motivated by design reasoning rather than
+                        derived from LMA theory.
                     </p>
                     <ul class="feature-list">
                         <li>
@@ -635,41 +690,93 @@
 
             <!-- Discussion -->
             <section id="discussion" class="report-section">
-                <div class="section-label">Section IX</div>
+                <div class="section-label">Section VIII</div>
                 <h2>Discussion</h2>
                 <p>
                     The prototype demonstrates that Laban Movement Analysis can function as a bridge between design
                     language and signal processing implementation. Rather than being used only as an analytical
                     vocabulary applied <em>post hoc</em> to describe finished works, the four Effort factors and the
-                    eight Basic Effort Actions here became explicit engineering targets for feature extraction,
-                    mapping, and UI design. The same words, namely <em>direct</em>, <em>sustained</em>,
-                    <em>strong</em>, and <em>free</em>, travel from Laban's original texts through the algorithms and
-                    arrive at the sound the performer hears.
+                    eight Basic Effort Actions here became explicit engineering targets for feature extraction.
                 </p>
                 <p>
                     Two architectural decisions proved especially consequential. The first was the
                     <em>one-factor-per-stage</em> hygiene: by giving each Effort factor exclusive write access to a
-                    distinct audio stage, the mapping became predictable and debuggabl.
+                    distinct audio stage, the mapping became predictable and debuggable.
                     The second was the <em>live/retrospective split</em>: live intensities drive the
                     sound, retrospective qualities name the action. The split respects Laban's original insight that
                     Effort is a quality of the <em>phrase</em> while also respecting the interaction-design
                     constraint that the sound must react within the phrase, not after it.
                 </p>
+
                 <p>
-                    Limitations remain. The operationalizations are approximations: jerk captures much but not all
-                    of Flow, and the score-based Time estimator compromises strict Laban formalism for
-                    responsiveness. The focal-joint simplification ignores the body-part category of LMA entirely; a
-                    whole-body version would require pose estimation beyond the hand. The current system is also
-                    designed for a single performer, so group Effort, which Laban discusses extensively, is out of
-                    scope. Finally, the webcam pipeline inherits the usual dependencies on lighting, skin-tone
-                    contrast against the background, and occlusion.
+                    A deeper issue runs beneath both decisions: the system measures kinematic
+                    <em>correlates</em> of Effort attitudes rather than the attitudes themselves. Laban's Effort
+                    factors describe phenomenological intentions. The mover's inner relationship to time, force,
+                    space, and continuity, but what is extracted from the landmark stream are accelerations,
+                    path ratios, and jerk values. These proxies are principled and work well across common gesture
+                    types, but the correspondence breaks down at the boundaries: a mover can produce Strong Weight
+                    kinematically (high acceleration) without the inner attitude of force, or exhibit genuine bound
+                    flow at low jerk (a slow, controlled press). The system classifies the measurement, not the
+                    intention. This is an inherent limitation of working without biometric sensing of muscular
+                    tension or electromyographic data, and is a known open problem across the computational LMA
+                    literature (Fdili Alaoui et al., 2012; Zhao &amp; Badler, 2005). The operationalizations here
+                    are best understood as practical approximations rather than solved equivalences.
+                </p>
+
+                <p>
+                    The orthogonality assumption, while architecturally clean, also departs from Laban's own
+                    framework. LMA Effort includes a theory of <em>affinities</em>: Sudden Time affiliates with
+                    Strong Weight, Free Flow with Sustained Time, Direct Space with Sudden Time. By treating the
+                    four factors as fully independent axes, the architecture cannot recognize or respond to these
+                    affiliated combinations as gestalts. A Punch is assembled from three separately computed
+                    scalars rather than recognized as a unified quality. This works sufficiently at the level of the
+                    eight named actions, but the richer relational texture
+                    that Laban described (effort affinities, effort drives, incomplete effort) is not captured.
+                    Future work could explore weighted co-occurrence models that respond to affiliated factor
+                    combinations as emergent patterns rather than sums of independent measurements.
+                </p>
+
+                <p>
+                    The primary source for this project Maranan et al.'s work on gestures, LMA, and
+                    spectromorphology, proposes using Denis Smalley's spectromorphological framework as the
+                    sound-side partner to LMA, on the grounds that both vocabularies describe motion quality in
+                    their respective domains. Spectromorphology provides a principled vocabulary for spectral
+                    motion, energy flux, and textural evolution that could have grounded the Effort-to-audio
+                    mappings more rigorously: for instance, Smalley's notion of spectral space has
+                    structural parallels to Laban's Space factor, andmotion-impulse types resemble
+                    Time qualities. This project arrived at similar mappings (Space - shimmer, Time - envelope
+                    transience, Weight - timbral density, Flow - spatial decay) through analogical design
+                    reasoning rather than by deploying spectromorphology as a framework. The convergence is
+                    encouraging, but engaging spectromorphology directly remains a meaningful extension that could
+                    provide theoretical grounding for choices that are currently justified by metaphor alone.
+                </p>
+
+                <p>
+                    The claim in Section IV that LMA preserves the <em>embodied loop</em>, intention, movement,
+                    sound, perception and adjusted intention, is a design goal rather than a validated outcome. The
+                    architecture is designed to support such a loop: live Effort response means the sound is shaped
+                    by movement quality while it is happening, and the named Basic Effort Actions give the performer
+                    a legible vocabulary for their own gestures. Whether a performer actually experiences
+                    continuity between intention and sonic response, or whether the kinematic proxies are
+                    perceptually transparent enough to sustain the loop, would require user evaluation.
+                    That evaluation is not included here.
+                </p>
+
+                <p>
+                    Limitations remain. The operationalizations are approximations, as detailed above. The
+                    focal-joint simplification ignores the Body category of LMA entirely; a whole-body version
+                    would require pose estimation beyond the hand, engaging arm initiation, torso involvement, and
+                    breath phrasing. The current system is designed for a single performer, so group Effort, which
+                    Laban discusses extensively, is out of scope. Finally, the webcam pipeline inherits the usual
+                    dependencies on lighting, skin-tone contrast against the background, and occlusion.
                 </p>
                 <p>
-                    Promising extensions include adding Shape descriptors (advancing/retreating, rising/sinking,
-                    enclosing/spreading) from torso motion to color the voice layer; using user-adaptive mapping
-                    profiles so the four Effort thresholds calibrate to the performer's kinesphere; integrating
-                    depth sensing to improve robustness; and exploring a dance-scale version of the system using
-                    full-body MoCap where the Body category of LMA can be engaged alongside Effort.
+                    Promising extensions include: adding Shape descriptors (advancing/retreating, rising/sinking,
+                    enclosing/spreading) from torso motion to color the voice layer; using user-adaptive thresholds
+                    so the four Effort boundaries calibrate to the performer's individual kinesphere and movement
+                    range; integrating depth sensing or EMG to improve the fidelity of Weight and Flow extraction
+                    beyond what kinematics alone can provide; and exploring a dance-scale version of the system
+                    using full-body MoCap where the Body category of LMA can be engaged alongside Effort.
                 </p>
             </section>
 

@@ -60,6 +60,11 @@ body {
     flex-direction: column;
 }
 
+.nav-panel .repo-link {
+    margin-top: auto;
+    align-self: flex-start;
+}
+
 .nav-brand {
     font-weight: 700;
     font-size: 0.8rem;
@@ -398,6 +403,33 @@ code {
     margin: 1rem 0 1.25rem;
 }
 
+/* ---------- Repo link in navigation ---------- */
+.repo-link {
+    display: inline-flex;
+    gap: 0.6rem;
+    align-items: center;
+    padding: 0.45rem 0.7rem;
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: transform 0.15s ease, background 0.15s ease;
+    width: fit-content;
+}
+
+.repo-link svg {
+    display: block;
+    opacity: 0.95;
+}
+
+.repo-link:hover {
+    transform: translateY(-3px);
+    background: #dbe3ff;
+}
+
 .action-card {
     background: var(--color-accent-light);
     border: 1px solid rgba(67, 97, 238, 0.2);
@@ -495,6 +527,7 @@ ol.feature-list {
 ol.feature-list li::marker {
     color: var(--color-accent);
     font-weight: 600;
+
 }
 
 /* ---------- Footer ---------- */
